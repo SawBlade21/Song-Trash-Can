@@ -9,11 +9,6 @@ CustomSongWidget* songWidget = nullptr;
 CCMenuItemSpriteExtra* trashButton = nullptr;
 CCNode* downloadButton = nullptr;
 CCNode* cancelButton = nullptr;
-#ifdef GEODE_IS_ANDROID
-bool android = true;
-#else
-bool android = false;
-#endif
 
 class $modify(Button, LevelInfoLayer) {
 
@@ -79,7 +74,7 @@ class $modify(Button, LevelInfoLayer) {
    		}
 		std::string saveDir = dirs::getSaveDir().string();
 		for (int i = 0; i < tokens.size(); i++) {
-			auto filename = (android ? ((sfx) ? (saveDir + "/" + "s" + tokens[i] + ".ogg") : (saveDir + "/" + tokens[i])) : ((sfx) ? (saveDir + "\\" + "s" + tokens[i] + ".ogg") : (saveDir + "\\" + tokens[i])));
+			auto filename = (sfx) ? (saveDir + "\\" + "s" + tokens[i] + ".ogg") : (saveDir + "\\" + tokens[i]);
 			if (sfx) {
 				std::filesystem::remove(filename);	
 				continue;
