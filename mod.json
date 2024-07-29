@@ -4,6 +4,7 @@
 		"win": "2.206"
 	},
 	"id": "sawblade.song_trash_can",
+	"repository": "https://github.com/SawBlade21/Song-And-SFX-Trash-Can",
 	"name": "Song & SFX Trash Can",
 	"version": "v1.0.0",
 	"developer": "Sawblade",
@@ -15,5 +16,12 @@
 			"type": "bool",
 			"default": false
 		}
-	}
+	},
+	"dependencies": [
+        {
+            "id": "geode.node-ids",
+            "version": ">=v1.13.1",
+            "importance": "required"
+        }
+    ]
 }
