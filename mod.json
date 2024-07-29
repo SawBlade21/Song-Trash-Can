@@ -1,0 +1,19 @@
+{
+	"geode": "3.2.0",
+	"gd": {
+		"win": "2.206"
+	},
+	"id": "sawblade.song_trash_can",
+	"name": "Song & SFX Trash Can",
+	"version": "v1.0.0",
+	"developer": "Sawblade",
+	"description": "Adds a trash button to the song widget in online level pages",
+	"settings": {
+		"delete-sfx": {
+			"name": "Delete SFX",
+			"description": "Trash button will also delete the level's SFX",
+			"type": "bool",
+			"default": false
+		}
+	}
+}
