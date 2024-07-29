@@ -9,9 +9,10 @@ CustomSongWidget* songWidget = nullptr;
 CCMenuItemSpriteExtra* trashButton = nullptr;
 CCNode* downloadButton = nullptr;
 CCNode* cancelButton = nullptr;
-bool android = false;
 #ifdef GEODE_IS_ANDROID
-android = true;
+bool android = true;
+#else
+bool android = false;
 #endif
 
 class $modify(Button, LevelInfoLayer) {
@@ -99,7 +100,7 @@ class $modify(Button, LevelInfoLayer) {
 		cancelButton = songWidget->getChildByID("buttons-menu")->getChildByID("cancel-button");
 
 		auto sprite = CCSprite::createWithSpriteFrameName("GJ_resetBtn_001.png");
-		sprite->setScale({1.3});
+		sprite->setScale(1.3);
 		trashButton = CCMenuItemSpriteExtra::create(sprite, this, menu_selector(Button::button));
 		trashButton->setPosition({128, -136});
 		trashButton->setID("trash-button");
