@@ -4,15 +4,27 @@
 		"win": "2.206"
 	},
 	"id": "sawblade.song_trash_can",
-	"repository": "https://github.com/SawBlade21/Song-And-SFX-Trash-Can",
-	"name": "Song & SFX Trash Can",
-	"version": "v1.0.0",
+	"repository": "https://github.com/SawBlade21/Song-Trash-Can",
+	"name": "Song Trash Can",
+	"version": "v1.1.0",
 	"developer": "Sawblade",
-	"description": "Adds a trash button to the song widget in online level pages",
+	"description": "Trash button that deletes a level's songs / SFX.",
 	"settings": {
-		"delete-sfx": {
-			"name": "Delete SFX",
-			"description": "Trash button will also delete the level's SFX",
+		"auto-select-songs": {
+			"name": "Auto Select Songs",
+			"description": "Automatically selects the <cg>songs</c> option in the delete popup on levels with <cl>SFX</c> or multiple <cl>songs</c>.",
+			"type": "bool",
+			"default": false
+		},
+		"auto-select-sfx": {
+			"name": "Auto Select SFX",
+			"description": "Automatically selects the <cg>SFX</c> option in the delete popup on levels with <cl>SFX</c> or multiple <cl>songs</c>.",
+			"type": "bool",
+			"default": false
+		},
+		"hide-settings-button": {
+			"name": "Hide Settings Button",
+			"description": "Hides the <cy>settings</c> button from the delete popups",
 			"type": "bool",
 			"default": false
 		}
@@ -23,5 +35,10 @@
             "version": ">=v1.13.1",
             "importance": "required"
         }
-    ]
+    ],
+	"tags": [
+		"interface",
+		"music",
+		"utility"
+	]
 }
