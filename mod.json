@@ -8,7 +8,7 @@
 	"id": "sawblade.song_trash_can",
 	"repository": "https://github.com/SawBlade21/Song-Trash-Can",
 	"name": "Song Trash Can",
-	"version": "v1.1.1",
+	"version": "v1.1.2",
 	"developer": "Sawblade",
 	"description": "Trash button that deletes a level's songs / SFX.",
 	"settings": {
