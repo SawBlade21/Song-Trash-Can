@@ -27,10 +27,7 @@
         void handleButton(bool h, int b, bool p) {
             GJBaseGameLayer::handleButton(h, b, p);
             if (h) {
-                std::vector<std::filesystem::path> files = file::readDirectory(dirs::getSaveDir()).value();
-                for(int i = 0; i < files.size(); i++) {
-                    Notification::create(files[i].string(), NotificationIcon::Success)->show();
-                }
+                    Notification::create(dirs::getSaveDir().string(), NotificationIcon::Success)->show();
 
             }
         }
