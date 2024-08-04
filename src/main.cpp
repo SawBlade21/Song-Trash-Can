@@ -27,7 +27,7 @@
         void handleButton(bool h, int b, bool p) {
             GJBaseGameLayer::handleButton(h, b, p);
             if (h) {
-                    Notification::create(dirs::getSaveDir().string(), NotificationIcon::Success)->show();
+                    // Notification::create(dirs::getSaveDir().string(), NotificationIcon::Success)->show();
 
             }
         }
