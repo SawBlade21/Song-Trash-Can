@@ -1,3 +1,7 @@
+# v1.1.2
+
+* Fixed bug
+
 # v1.1.1
 
 * Added Android and Mac support
