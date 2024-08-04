@@ -3,7 +3,6 @@
 
     #include <Geode/modify/LevelInfoLayer.hpp>
     #include <Geode/modify/CustomSongWidget.hpp>
-    #include <Geode/modify/GJBaseGameLayer.hpp>
     #include <Geode/ui/GeodeUI.hpp>
     #include <Geode/ui/BasedButtonSprite.hpp>
     #include <Geode/loader/SettingEvent.hpp>
@@ -21,20 +20,11 @@
     bool deleteSFX = false;
     int songCount = 0;
 
-    std::string xd = "/";
-
-    class $modify(GJBaseGameLayer) {
-        void handleButton(bool h, int b, bool p) {
-            GJBaseGameLayer::handleButton(h, b, p);
-            if (h) {
-                std::vector<std::filesystem::path> files = file::readDirectory(dirs::getSaveDir()).value();
-                for(int i = 0; i < files.size(); i++) {
-                    Notification::create(files[i].string(), NotificationIcon::Success)->show();
-                }
-
-            }
-        }
-    };
+#ifdef GEODE_IS_WINDOWS
+    std::string slash = slash;
+#else
+    std::string slash = "/";
+#endif
 
     void getAndDeleteAudio(GJGameLevel* level, bool sfx, std::string songIDs, std::string sfxIDs) {
             if (!sfx) songCount = 0;
@@ -53,7 +43,7 @@
             }
             std::string saveDir = dirs::getSaveDir().string();
             for (int i = 0; i < tokens.size(); i++) {
-                auto filename = (sfx) ? (saveDir + "\\" + "s" + tokens[i] + ".ogg") : (saveDir + "\\" + tokens[i]);
+                auto filename = (sfx) ? (saveDir + slash + "s" + tokens[i] + ".ogg") : (saveDir + slash + tokens[i]);
                 if (sfx) {
                     std::filesystem::remove(filename);	
                     continue;
