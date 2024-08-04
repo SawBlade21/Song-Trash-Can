@@ -155,7 +155,7 @@ class trashPopup : public geode::Popup<> {
 					CircleBaseColor::DarkPurple, 
 					CircleBaseSize::Small
 				);
-				settingsSprite->setScale({0.75});
+				settingsSprite->setScale(0.75);
 				settingsButton = CCMenuItemSpriteExtra::create(settingsSprite, this, menu_selector(trashPopup::openSettings));
 				popupMenu->addChild(settingsButton);
 				settingsButton->setPosition({-146, 77});
