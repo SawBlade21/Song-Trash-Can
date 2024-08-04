@@ -11,7 +11,7 @@
     #include <vector>
 
     using namespace geode::prelude;
-
+/*
     CustomSongWidget* songWidget = nullptr;
     CCMenuItemSpriteExtra* trashButton = nullptr;
     CCNode* downloadButton = nullptr;
@@ -34,7 +34,7 @@
     };
 
     void getAndDeleteAudio(GJGameLevel* level, bool sfx, std::string songIDs, std::string sfxIDs) {
-            /*if (!sfx) songCount = 0;
+            if (!sfx) songCount = 0;
             if (!sfx && songIDs == "" && sfxIDs == "") { 
                 trashButton->setVisible(false);
                 return songWidget->deleteSong();
@@ -50,7 +50,7 @@
             }
             std::string saveDir = dirs::getSaveDir().string();
             for (int i = 0; i < tokens.size(); i++) {
-                auto filename = (sfx) ? (saveDir + "\\" + "s" + tokens[i] + ".ogg") : (saveDir + "\\" + tokens[i]);
+                std::string filename = (sfx) ? (saveDir + "\\" + "s" + tokens[i] + ".ogg") : (saveDir + "\\" + tokens[i]);
                 if (sfx) {
                     std::filesystem::remove(filename);	
                     continue;
@@ -59,7 +59,7 @@
                 std::filesystem::remove(filename + ".ogg");
                 songCount++;
                 log::debug("{}", songCount);
-            }*/
+            }
         }
 
     void deleteAudio(GJGameLevel* level, LevelInfoLayer* layer) {
@@ -317,4 +317,4 @@
             if (settingsButton)
                 settingsButton->setVisible((!value));
     });
-    };
+    };*/
