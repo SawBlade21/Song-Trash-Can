@@ -51,7 +51,6 @@
                 if (!std::filesystem::remove(filename + ".mp3"))
                 std::filesystem::remove(filename + ".ogg");
                 songCount++;
-                log::debug("{}", songCount);
             }
         }
 
