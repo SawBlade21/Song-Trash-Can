@@ -3,6 +3,8 @@
 
     #include <Geode/modify/LevelInfoLayer.hpp>
     #include <Geode/modify/CustomSongWidget.hpp>
+    #include <Geode/modify/CreatorLayer.hpp>
+    #include <Geode/modify/CCScheduler.hpp>
     #include <Geode/ui/GeodeUI.hpp>
     #include <Geode/ui/BasedButtonSprite.hpp>
     #include <Geode/loader/SettingEvent.hpp>
@@ -19,14 +21,12 @@
     bool deleteSongs = false;
     bool deleteSFX = false;
     int songCount = 0;
+    bool isPlaying = false;
+    int waitTime = 0;
+    GJGameLevel* globalLevel = nullptr;
+    LevelInfoLayer* globalLayer = nullptr;
 
-#ifdef GEODE_IS_WINDOWS
-    std::string slash = "\\";
-#else
-    std::string slash = "/";
-#endif
-
-    void getAndDeleteAudio(GJGameLevel* level, bool sfx, std::string songIDs, std::string sfxIDs) {
+    void getAndDeleteAudio(bool sfx, std::string songIDs, std::string sfxIDs) {
             if (!sfx) songCount = 0;
             if (!sfx && songIDs == "" && sfxIDs == "") { 
                 trashButton->setVisible(false);
@@ -41,38 +41,45 @@
             while (std::getline(ss, token, ',')) {
             tokens.push_back(token);
             }
-            std::string saveDir = dirs::getSaveDir().string();
+            std::filesystem::path saveDir = dirs::getSaveDir();
             for (int i = 0; i < tokens.size(); i++) {
-                auto filename = (sfx) ? (saveDir + slash + "s" + tokens[i] + ".ogg") : (saveDir + slash + tokens[i]);
+                auto filename = sfx ? saveDir / ("s" + tokens[i] + ".ogg") : saveDir / tokens[i];
                 if (sfx) {
                     std::filesystem::remove(filename);	
                     continue;
                 }
-                if (!std::filesystem::remove(filename + ".mp3"))
-                std::filesystem::remove(filename + ".ogg");
+                if (!std::filesystem::remove(filename.string() + ".mp3"))
+                std::filesystem::remove(filename.string() + ".ogg");
                 songCount++;
             }
         }
 
-    void deleteAudio(GJGameLevel* level, LevelInfoLayer* layer) {
+    void deleteAudio() {
             trashButton->setVisible(false);
-            std::string songIDs = std::string(level->m_songIDs);
-            std::string sfxIDs = std::string(level->m_sfxIDs);
+            std::string songIDs = std::string(globalLevel->m_songIDs);
+            std::string sfxIDs = std::string(globalLevel->m_sfxIDs);
             if ((songIDs) == "" && sfxIDs == "")
                 return songWidget->deleteSong();
 
-            getAndDeleteAudio(level, false, songIDs, sfxIDs);
-            getAndDeleteAudio(level, true, songIDs, sfxIDs);
+            if (isPlaying && deleteSongs) {
+                FMODAudioEngine::sharedEngine()->stopAllMusic();
+                isPlaying = false;
+                waitTime = 10;
+                return;
+            }
 
-            auto newInfoLayer = LevelInfoLayer::create(layer->m_level, false);
-            layer->removeFromParentAndCleanup(true);
+            getAndDeleteAudio(false, songIDs, sfxIDs);
+            getAndDeleteAudio(true, songIDs, sfxIDs);
+
+            auto newInfoLayer = LevelInfoLayer::create(globalLevel, false);
+            globalLayer->removeFromParentAndCleanup(true);
             CCDirector::sharedDirector()->getRunningScene()->addChild(newInfoLayer);
             
-            bool songs = (level->m_songIDs != "" && deleteSongs);
-            bool sfx = (level->m_sfxIDs != "" && deleteSFX);
+            bool songs = (globalLevel->m_songIDs != "" && deleteSongs);
+            bool sfx = (globalLevel->m_sfxIDs != "" && deleteSFX);
             bool all = (songs && sfx);
             bool none = (!songs && !sfx);
-            bool robtopSFX = (songWidget->m_isRobtopSong && level->m_songIDs != "");
+            bool robtopSFX = (songWidget->m_isRobtopSong && globalLevel->m_songIDs != "");
             std::string errorText = (all) ? "Songs & SFX Deleted" : ((songs) ? (songCount == 1) ? "Song Deleted" : "Songs Deleted" : ((sfx || robtopSFX) ? "SFX Deleted" : ""));
 
             songWidget->m_errorLabel->setColor(ccc3(255, 100, 0));
@@ -171,7 +178,7 @@
         void onDelete(CCObject* obj) {
             deleteSongs = (songToggle->isToggled() ? true : false);
             deleteSFX = (sfxToggle->isToggled() ? true : false);
-            deleteAudio(layer->m_level, layer);
+            deleteAudio();
             this->keyBackClicked();
         }
 
@@ -193,23 +200,29 @@
     };
 
     class $modify(Button, LevelInfoLayer) {
+       
         void openSettings(CCObject* obj) {
             geode::openSettingsPopup(Mod::get());
         }
 
+        void onPlay(CCObject* sender) {
+            LevelInfoLayer::onPlay(sender);
+            isPlaying = false;
+        }
+
         void button(CCObject* obj) {
-            if (std::string(this->m_level->m_levelString) == "") return;
+            if (std::string(globalLevel->m_levelString) == "") return;
             std::string popupText = "Do you want to <cr>delete</c> ";
             if (songWidget->m_isRobtopSong) {
                 popupText += "all SFX?";
                 deleteSFX = true;
             }
             else {
-                popupText += (std::string(this->m_level->m_songIDs) == "") ? "this song" : "all songs";
-                popupText += (std::string(this->m_level->m_sfxIDs) != "") ? " and SFX?" : "?"; 
+                popupText += (std::string(globalLevel->m_songIDs) == "") ? "this song" : "all songs";
+                popupText += (std::string(globalLevel->m_sfxIDs) != "") ? " and SFX?" : "?"; 
             }
                 
-            if ((!songWidget->m_isRobtopSong && std::string(this->m_level->m_sfxIDs) != "") || (std::string(this->m_level->m_songIDs) != "")) {
+            if ((!songWidget->m_isRobtopSong && std::string(globalLevel->m_sfxIDs) != "") || (std::string(globalLevel->m_songIDs) != "")) {
                 auto popup = trashPopup::create();
                 popup->layer = this;
                 popup->show();
@@ -222,7 +235,7 @@
                     "Cancel", "Delete",
                     [this](auto, bool btn2) {
                         if (btn2)  {
-                            deleteAudio(this->m_level, this);
+                            deleteAudio();
                         }
                     }
                 );
@@ -252,6 +265,8 @@
             songWidget = static_cast<CustomSongWidget*>(this->getChildByID("custom-songs-widget"));
             downloadButton = songWidget->getChildByID("buttons-menu")->getChildByID("download-button");
             cancelButton = songWidget->getChildByID("buttons-menu")->getChildByID("cancel-button");
+            globalLevel = this->m_level;
+            globalLayer = this;
 
             auto sprite = CCSprite::createWithSpriteFrameName("GJ_resetBtn_001.png");
             sprite->setScale(1.5);
@@ -268,7 +283,7 @@
             if (!downloadButton->isVisible() && !cancelButton->isVisible()) {
                 trashButton->setVisible(true);
             }	
-            if ((songWidget->m_isRobtopSong && level->m_sfxIDs == "")) trashButton->setVisible(false);
+            if ((songWidget->m_isRobtopSong && globalLevel->m_sfxIDs == "")) trashButton->setVisible(false);
 
             return true;
         }
@@ -280,6 +295,8 @@
             downloadButton = nullptr;
             cancelButton = nullptr;
             settingsButton = nullptr;
+            globalLevel = nullptr;
+            globalLayer = nullptr;
             songCount = 0;
         }
 
@@ -302,6 +319,42 @@
             if (this == songWidget && trashButton && ((!downloadButton->isVisible() && !cancelButton->isVisible()) || std::string(this->m_errorLabel->getString()) == "Download complete.")) 
                 trashButton->setVisible(true);
         }
+
+        void onPlayback(CCObject* obj) {
+            CustomSongWidget::onPlayback(obj);
+            isPlaying = true;
+        }
+    };
+
+    class $modify (CreatorLayer) {
+        void onBack(CCObject* sender) {
+            CreatorLayer::onBack(sender);
+            isPlaying = false;
+        }
+
+        void onSecretVault(CCObject* sender) {
+            CreatorLayer::onSecretVault(sender);
+            isPlaying = false;
+        }
+
+        void onTreasureRoom(CCObject* sender) {
+            CreatorLayer::onTreasureRoom(sender);
+            isPlaying = false;
+        }
+
+    };
+
+    class $modify (CCScheduler) {
+        void update(float f) {
+            CCScheduler::update(f);
+            if (waitTime != 0) {
+                waitTime--;
+                if (waitTime == 0) {
+                    deleteAudio();
+                }
+            }
+        }
+
     };
 
     $execute {

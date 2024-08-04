@@ -1,3 +1,7 @@
+# v1.1.3
+
+* Fixed a crash caused by deleting the song currently playing
+
 # v1.1.2
 
 * Fixed bug
