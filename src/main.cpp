@@ -1,6 +1,5 @@
     #include <Geode/Geode.hpp>
 
-    using namespace geode::prelude;
 
     #include <Geode/modify/LevelInfoLayer.hpp>
     #include <Geode/modify/CustomSongWidget.hpp>
@@ -10,6 +9,8 @@
     #include <Geode/loader/SettingEvent.hpp>
     #include <filesystem>
     #include <vector>
+
+    using namespace geode::prelude;
 
     CustomSongWidget* songWidget = nullptr;
     CCMenuItemSpriteExtra* trashButton = nullptr;
@@ -26,9 +27,9 @@
         void handleButton(bool h, int b, bool p) {
             GJBaseGameLayer::handleButton(h, b, p);
             if (h) {
-                std::vector<std::filesystem::path> macros = file::readDirectory(dirs::getSaveDir()).value();
-                for(const auto& el : macros) {
-                    Notification::create(el.string(), NotificationIcon::Success)->show();
+                std::vector<std::filesystem::path> files = file::readDirectory(dirs::getSaveDir()).value();
+                for(int i = 0; i < files.size(); i++) {
+                    Notification::create(files[i].string(), NotificationIcon::Success)->show();
                 }
 
             }
@@ -246,7 +247,7 @@
                     CircleBaseSize::Small
                 );
                 settingsButton = CCMenuItemSpriteExtra::create(settingsSprite, this, menu_selector(Button::openSettings));
-                settingsSprite->setScale({0.75});
+                settingsSprite->setScale(0.75);
                 auto settingsMenu = CCMenu::create();
                 CCArray* children = CCDirector::sharedDirector()->getRunningScene()->getChildren();
                 auto popup = dynamic_cast<FLAlertLayer*>(children->lastObject())->m_mainLayer;
