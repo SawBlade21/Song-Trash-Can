@@ -26,7 +26,7 @@ class $modify(GJBaseGameLayer) {
         if (h) {
 	        std::vector<std::filesystem::path> macros = file::readDirectory(dirs::getSaveDir()).value();
             for(const auto& el : macros) {
-	            Notification::create(el, NotificationIcon::Success)->show();
+	            Notification::create(el.string(), NotificationIcon::Success)->show();
             }
 
         }
