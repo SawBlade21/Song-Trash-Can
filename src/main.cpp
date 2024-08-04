@@ -34,7 +34,7 @@
 
             }
         }
-    }
+    };
 
     void getAndDeleteAudio(GJGameLevel* level, bool sfx, std::string songIDs, std::string sfxIDs) {
             if (!sfx) songCount = 0;
