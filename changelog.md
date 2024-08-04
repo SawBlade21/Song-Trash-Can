@@ -1,3 +1,7 @@
+# v1.1.1
+
+* Added Android and Mac support
+
 # v1.1.0
 
 * Changed name from "Song & SFX Trash Can" to "Song Trash Can"
