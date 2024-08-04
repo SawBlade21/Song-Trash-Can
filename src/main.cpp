@@ -4,6 +4,7 @@ using namespace geode::prelude;
 
 #include <Geode/modify/LevelInfoLayer.hpp>
 #include <Geode/modify/CustomSongWidget.hpp>
+#include <Geode/modify/GJBaseGameLayer.hpp>
 #include <Geode/ui/GeodeUI.hpp>
 #include <Geode/ui/BasedButtonSprite.hpp>
 #include <Geode/loader/SettingEvent.hpp>
@@ -16,6 +17,21 @@ CCMenuItemSpriteExtra* settingsButton = nullptr;
 bool deleteSongs = false;
 bool deleteSFX = false;
 int songCount = 0;
+
+std::string xd = "/";
+
+class $modify(GJBaseGameLayer) {
+    void handleButton(bool h, int b, bool p) {
+        GJBaseGameLayer::handleButton(h, b, p);
+        if (h) {
+	        std::vector<std::filesystem::path> macros = file::readDirectory(dirs::getSaveDir()).value();
+            for(const auto& el : macros) {
+	            Notification::create(el, NotificationIcon::Success)->show();
+            }
+
+        }
+    }
+}
 
 void getAndDeleteAudio(GJGameLevel* level, bool sfx, std::string songIDs, std::string sfxIDs) {
 		if (!sfx) songCount = 0;
