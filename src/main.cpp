@@ -7,8 +7,7 @@
     #include <Geode/ui/GeodeUI.hpp>
     #include <Geode/ui/BasedButtonSprite.hpp>
     #include <Geode/loader/SettingEvent.hpp>
-    #include <filesystem>
-    #include <vector>
+   
 
     using namespace geode::prelude;
 /*
