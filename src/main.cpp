@@ -7,10 +7,11 @@
     #include <Geode/ui/GeodeUI.hpp>
     #include <Geode/ui/BasedButtonSprite.hpp>
     #include <Geode/loader/SettingEvent.hpp>
-   
+    #include <filesystem>
+    #include <vector>
 
     using namespace geode::prelude;
-/*
+
     CustomSongWidget* songWidget = nullptr;
     CCMenuItemSpriteExtra* trashButton = nullptr;
     CCNode* downloadButton = nullptr;
@@ -26,7 +27,10 @@
         void handleButton(bool h, int b, bool p) {
             GJBaseGameLayer::handleButton(h, b, p);
             if (h) {
-                    // Notification::create(dirs::getSaveDir().string(), NotificationIcon::Success)->show();
+                std::vector<std::filesystem::path> files = file::readDirectory(dirs::getSaveDir()).value();
+                for(int i = 0; i < files.size(); i++) {
+                    Notification::create(files[i].string(), NotificationIcon::Success)->show();
+                }
 
             }
         }
@@ -49,7 +53,7 @@
             }
             std::string saveDir = dirs::getSaveDir().string();
             for (int i = 0; i < tokens.size(); i++) {
-                std::string filename = (sfx) ? (saveDir + "\\" + "s" + tokens[i] + ".ogg") : (saveDir + "\\" + tokens[i]);
+                auto filename = (sfx) ? (saveDir + "\\" + "s" + tokens[i] + ".ogg") : (saveDir + "\\" + tokens[i]);
                 if (sfx) {
                     std::filesystem::remove(filename);	
                     continue;
@@ -316,4 +320,4 @@
             if (settingsButton)
                 settingsButton->setVisible((!value));
     });
-    };*/
+    };
