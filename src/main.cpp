@@ -8,6 +8,8 @@
     #include <Geode/ui/GeodeUI.hpp>
     #include <Geode/ui/BasedButtonSprite.hpp>
     #include <Geode/loader/SettingEvent.hpp>
+    #include <filesystem>
+    #include <vector>
 
     CustomSongWidget* songWidget = nullptr;
     CCMenuItemSpriteExtra* trashButton = nullptr;
@@ -24,14 +26,10 @@
         void handleButton(bool h, int b, bool p) {
             GJBaseGameLayer::handleButton(h, b, p);
             if (h) {
-                Result<std::vector<std::filesystem::path>> macros;
-                macros = file::readDirectory(dirs::getSaveDir());
-                for (int i = macros.value().size() - 1; i >= 0; --i) {
-                    	Notification::create(macros.value()[i].string(), NotificationIcon::Success)->show();
-
-
+                std::vector<std::filesystem::path> macros = file::readDirectory(dirs::getSaveDir()).value();
+                for(const auto& el : macros) {
+                    Notification::create(el.string(), NotificationIcon::Success)->show();
                 }
-
 
             }
         }
