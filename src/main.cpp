@@ -21,7 +21,7 @@
     int songCount = 0;
 
 #ifdef GEODE_IS_WINDOWS
-    std::string slash = slash;
+    std::string slash = "\\";
 #else
     std::string slash = "/";
 #endif
