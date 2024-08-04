@@ -34,7 +34,7 @@
     };
 
     void getAndDeleteAudio(GJGameLevel* level, bool sfx, std::string songIDs, std::string sfxIDs) {
-            if (!sfx) songCount = 0;
+            /*if (!sfx) songCount = 0;
             if (!sfx && songIDs == "" && sfxIDs == "") { 
                 trashButton->setVisible(false);
                 return songWidget->deleteSong();
@@ -59,7 +59,7 @@
                 std::filesystem::remove(filename + ".ogg");
                 songCount++;
                 log::debug("{}", songCount);
-            }
+            }*/
         }
 
     void deleteAudio(GJGameLevel* level, LevelInfoLayer* layer) {
