@@ -1,46 +1,14 @@
 {
-	"geode": "3.4.0",
+	"geode": "3.2.0",
 	"gd": {
 		"win": "2.206",
 		"android": "2.206",
-		"mac": "2.206"
+		"mac": "2.206",
+		"ios": "2.206"
 	},
-	"id": "sawblade.song_trash_can",
-	"repository": "https://github.com/SawBlade21/Song-Trash-Can",
-	"name": "Song Trash Can",
-	"version": "v1.1.0",
+	"id": "sawblade.song_search",
+	"name": "Song Search",
+	"version": "v1.0.0",
 	"developer": "Sawblade",
-	"description": "Trash button that deletes a level's songs / SFX.",
-	"settings": {
-		"auto-select-songs": {
-			"name": "Auto Select Songs",
-			"description": "Automatically selects the <cg>songs</c> option in the delete popup on levels with <cl>SFX</c> or multiple <cl>songs</c>.",
-			"type": "bool",
-			"default": false
-		},
-		"auto-select-sfx": {
-			"name": "Auto Select SFX",
-			"description": "Automatically selects the <cg>SFX</c> option in the delete popup on levels with <cl>SFX</c> or multiple <cl>songs</c>.",
-			"type": "bool",
-			"default": false
-		},
-		"hide-settings-button": {
-			"name": "Hide Settings Button",
-			"description": "Hides the <cy>settings</c> button from the delete popups",
-			"type": "bool",
-			"default": false
-		}
-	},
-	"dependencies": [
-        {
-            "id": "geode.node-ids",
-            "version": ">=v1.13.1",
-            "importance": "required"
-        }
-    ],
-	"tags": [
-		"interface",
-		"music",
-		"utility"
-	]
+	"description": "song search"
 }
