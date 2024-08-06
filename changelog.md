@@ -1,3 +1,9 @@
+# v1.1.4
+
+* Fixed a crash on android when downloading SFX
+* Fixed visual bug with popup text
+* Fixed bug with trash button not working
+
 # v1.1.3
 
 * Fixed a crash caused by deleting the song currently playing

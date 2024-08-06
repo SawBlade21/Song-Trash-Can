@@ -26,7 +26,7 @@
     GJGameLevel* globalLevel = nullptr;
     LevelInfoLayer* globalLayer = nullptr;
 
-    void getAndDeleteAudio(bool sfx, std::string songIDs, std::string sfxIDs) {
+    void getAndDeleteAudio(GJGameLevel* level, bool sfx, std::string songIDs, std::string sfxIDs) {
             if (!sfx) songCount = 0;
             if (!sfx && songIDs == "" && sfxIDs == "") { 
                 trashButton->setVisible(false);
@@ -49,15 +49,15 @@
                     continue;
                 }
                 if (!std::filesystem::remove(filename.string() + ".mp3"))
-                std::filesystem::remove(filename.string() + ".ogg");
+                    std::filesystem::remove(filename.string() + ".ogg");
                 songCount++;
             }
         }
 
-    void deleteAudio() {
+    void deleteAudio(GJGameLevel* level, LevelInfoLayer* layer) {
             trashButton->setVisible(false);
-            std::string songIDs = std::string(globalLevel->m_songIDs);
-            std::string sfxIDs = std::string(globalLevel->m_sfxIDs);
+            std::string songIDs = std::string(level->m_songIDs);
+            std::string sfxIDs = std::string(level->m_sfxIDs);
             if ((songIDs) == "" && sfxIDs == "")
                 return songWidget->deleteSong();
 
@@ -68,18 +68,18 @@
                 return;
             }
 
-            getAndDeleteAudio(false, songIDs, sfxIDs);
-            getAndDeleteAudio(true, songIDs, sfxIDs);
+            getAndDeleteAudio(level, false, songIDs, sfxIDs);
+            getAndDeleteAudio(level, true, songIDs, sfxIDs);
 
-            auto newInfoLayer = LevelInfoLayer::create(globalLevel, false);
+            auto newInfoLayer = LevelInfoLayer::create(level, false);
             globalLayer->removeFromParentAndCleanup(true);
             CCDirector::sharedDirector()->getRunningScene()->addChild(newInfoLayer);
             
-            bool songs = (globalLevel->m_songIDs != "" && deleteSongs);
-            bool sfx = (globalLevel->m_sfxIDs != "" && deleteSFX);
+            bool songs = (level->m_songIDs != "" && deleteSongs);
+            bool sfx = (level->m_sfxIDs != "" && deleteSFX);
             bool all = (songs && sfx);
             bool none = (!songs && !sfx);
-            bool robtopSFX = (songWidget->m_isRobtopSong && globalLevel->m_songIDs != "");
+            bool robtopSFX = (songWidget->m_isRobtopSong && level->m_songIDs != "");
             std::string errorText = (all) ? "Songs & SFX Deleted" : ((songs) ? (songCount == 1) ? "Song Deleted" : "Songs Deleted" : ((sfx || robtopSFX) ? "SFX Deleted" : ""));
 
             songWidget->m_errorLabel->setColor(ccc3(255, 100, 0));
@@ -131,17 +131,18 @@
                 cancelBtn->setPosition({-59, -76.5});
                 deleteBtn->setPosition({60.5, -76.5});
 
-                auto messageText = CCLabelBMFont::create("What do you want to", "chatFont.fnt");
-                auto deleteText = CCLabelBMFont::create(" delete?", "chatFont.fnt");
-                deleteText->setColor(ccc3(255, 90, 90));
+                auto messageText = CCLabelBMFont::create("What do you want to delete?", "chatFont.fnt");
+                for (int i = 20; i < 26; i++) {
+                    auto letter = dynamic_cast<CCSprite*>(messageText->getChildren()->objectAtIndex(i));
+                    letter->setColor(ccc3(255, 90, 90));
+                }
+
                 auto songText = CCLabelBMFont::create("Songs", "bigFont.fnt");
                 auto sfxText = CCLabelBMFont::create("SFX", "bigFont.fnt");
                 popupMenu->addChild(messageText);
-                popupMenu->addChild(deleteText);
                 popupMenu->addChild(songText);
                 popupMenu->addChild(sfxText);
-                messageText->setPosition({-26.7, 51.5});
-                deleteText->setPosition({65.8, 51.5});
+                messageText->setPosition({0, 51.5});
                 songText->setPosition({-59, -27.5});
                 songText->setScale(0.7);
                 sfxText->setPosition({60.5, -27.5});
@@ -178,7 +179,7 @@
         void onDelete(CCObject* obj) {
             deleteSongs = (songToggle->isToggled() ? true : false);
             deleteSFX = (sfxToggle->isToggled() ? true : false);
-            deleteAudio();
+            deleteAudio(layer->m_level, layer);
             this->keyBackClicked();
         }
 
@@ -211,18 +212,19 @@
         }
 
         void button(CCObject* obj) {
-            if (std::string(globalLevel->m_levelString) == "") return;
+            globalLevel = this->m_level;
+            if (std::string(this->m_level->m_levelString) == "") return;
             std::string popupText = "Do you want to <cr>delete</c> ";
             if (songWidget->m_isRobtopSong) {
                 popupText += "all SFX?";
                 deleteSFX = true;
             }
             else {
-                popupText += (std::string(globalLevel->m_songIDs) == "") ? "this song" : "all songs";
-                popupText += (std::string(globalLevel->m_sfxIDs) != "") ? " and SFX?" : "?"; 
+                popupText += (std::string(this->m_level->m_songIDs) == "") ? "this song" : "all songs";
+                popupText += (std::string(this->m_level->m_sfxIDs) != "") ? " and SFX?" : "?"; 
             }
                 
-            if ((!songWidget->m_isRobtopSong && std::string(globalLevel->m_sfxIDs) != "") || (std::string(globalLevel->m_songIDs) != "")) {
+            if ((!songWidget->m_isRobtopSong && std::string(this->m_level->m_sfxIDs) != "") || (std::string(this->m_level->m_songIDs) != "")) {
                 auto popup = trashPopup::create();
                 popup->layer = this;
                 popup->show();
@@ -235,7 +237,7 @@
                     "Cancel", "Delete",
                     [this](auto, bool btn2) {
                         if (btn2)  {
-                            deleteAudio();
+                            deleteAudio(this->m_level, this);
                         }
                     }
                 );
@@ -314,9 +316,9 @@
                 trashButton->setVisible(true);
         }
 
-        virtual void downloadSFXFinished(int i) {
-            CustomSongWidget::downloadSFXFinished(i);
-            if (this == songWidget && trashButton && ((!downloadButton->isVisible() && !cancelButton->isVisible()) || std::string(this->m_errorLabel->getString()) == "Download complete.")) 
+        virtual void downloadAssetFinished(int i, GJAssetType assetType) {
+            CustomSongWidget::downloadAssetFinished(i, assetType);
+            if (static_cast<int>(assetType) == 2 && this == songWidget && trashButton && ((!downloadButton->isVisible() && !cancelButton->isVisible()) || std::string(this->m_errorLabel->getString()) == "Download complete.")) 
                 trashButton->setVisible(true);
         }
 
@@ -350,7 +352,7 @@
             if (waitTime != 0) {
                 waitTime--;
                 if (waitTime == 0) {
-                    deleteAudio();
+                    deleteAudio(globalLevel, globalLayer);
                 }
             }
         }
