@@ -1,3 +1,7 @@
+# v1.1.5
+
+* Fixed crash
+
 # v1.1.4
 
 * Fixed a crash on android when downloading SFX
@@ -26,7 +30,6 @@
 * Removed "Delete SFX" setting
 * Added mod tags
 * Updated mod description
-
 
 # 1.0.0
 * Release

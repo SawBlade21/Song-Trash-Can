@@ -212,6 +212,7 @@
         }
 
         void button(CCObject* obj) {
+            if (songWidget->m_isRobtopSong) return;
             globalLevel = this->m_level;
             if (std::string(this->m_level->m_levelString) == "") return;
             std::string popupText = "Do you want to <cr>delete</c> ";
@@ -305,6 +306,7 @@
         void levelDownloadFinished(GJGameLevel* level) {
             LevelInfoLayer::levelDownloadFinished(level);
             if (trashButton) trashButton->setVisible(!downloadButton->isVisible() && !cancelButton->isVisible());
+            if (!songWidget) return;
             if (songWidget->m_isRobtopSong && level->m_sfxIDs == "") trashButton->setVisible(false);
         }
     };
