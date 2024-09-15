@@ -26,7 +26,6 @@ bool isPlaying = false;
 int waitTime = 0;
 GJGameLevel* globalLevel = nullptr;
 LevelInfoLayer* globalLayer = nullptr;
-std::filesystem::path macSaveDir;
 
 void getAndDeleteAudio(GJGameLevel* level, bool sfx, std::string songIDs, std::string sfxIDs) {
     if (!sfx) songCount = 0;
