@@ -1,8 +1,8 @@
 # v1.1.6
 
-* Removed Node IDs dependancy (thanks hiimjustin000)
+* Removed Node IDs dependency (thanks hiimjustin000)
 * Changed button to be the correct texture (thanks GDColon)
-* Added change custom songs location setting support
+* Added Change Custom Songs Location setting support (thanks Erymanthus)
 
 # v1.1.5
 

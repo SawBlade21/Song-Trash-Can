@@ -10,12 +10,7 @@
 #include <Geode/loader/SettingEvent.hpp>
 #include <filesystem>
 #include <Geode/modify/MusicDownloadManager.hpp>
-
-#ifdef GEODE_IS_ANDROID
-bool android = true;
-#else
-bool android = false;
-#endif
+#include "blacklisted_ids.hpp"
 
 using namespace geode::prelude;
 
@@ -50,6 +45,7 @@ void getAndDeleteAudio(GJGameLevel* level, bool sfx, std::string songIDs, std::s
     }
     for (int i = 0; i < tokens.size(); i++) {
         std::string filename;
+        if (blacklistedIDs.contains(std::stoi(tokens[i]))) continue;
         if (sfx) {
             filename = MusicDownloadManager::sharedState()->pathForSFX(std::stoi(tokens[i]));	
         }
@@ -372,29 +368,5 @@ $execute {
     geode::listenForSettingChanges("hide-settings-button", +[](bool  value) {
         if (settingsButton)
             settingsButton->setVisible((!value));
-});
+    });
 };
-
-/*class $modify (MusicDownloadManager) {
-    gd::string pathForSFX(int id) {
-        auto path = MusicDownloadManager::pathForSFX(id);
-        log::debug("pathForSFX: {}", path);
-        return path;
-    }
-	gd::string pathForSFXFolder(int id) {
-        auto path = MusicDownloadManager::pathForSFXFolder(id);
-        log::debug("pathForSFXFolder: {}", path);
-        return path;
-    }
-	gd::string pathForSong(int id) {
-        auto path = MusicDownloadManager::pathForSong(id);
-        log::debug("pathForSong: {}", path);
-        return path;
-    }
-	gd::string pathForSongFolder(int id) {
-        auto path = MusicDownloadManager::pathForSongFolder(id);
-        log::debug("pathForSongFolder: {}", path);
-        return path;
-    }
-
-};*/
