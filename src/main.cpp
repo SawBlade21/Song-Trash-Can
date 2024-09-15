@@ -31,6 +31,7 @@ bool isPlaying = false;
 int waitTime = 0;
 GJGameLevel* globalLevel = nullptr;
 LevelInfoLayer* globalLayer = nullptr;
+std::filesystem::path macSaveDir;
 
 void getAndDeleteAudio(GJGameLevel* level, bool sfx, std::string songIDs, std::string sfxIDs) {
     if (!sfx) songCount = 0;
@@ -47,21 +48,16 @@ void getAndDeleteAudio(GJGameLevel* level, bool sfx, std::string songIDs, std::s
     while (std::getline(ss, token, ',')) {
     tokens.push_back(token);
     }
-    std::filesystem::path saveDir = dirs::getSaveDir();
-    std::filesystem::path changedSaveDir = (dirs::getGameDir() / "Resources");
     for (int i = 0; i < tokens.size(); i++) {
-        auto filename = sfx ? saveDir / ("s" + tokens[i] + ".ogg") : saveDir / tokens[i];
-        auto altFilename = sfx ? changedSaveDir / ("s" + tokens[i] + ".ogg") : changedSaveDir / tokens[i];
+        std::string filename;
         if (sfx) {
-            std::filesystem::remove(filename);	
-            std::filesystem::remove(altFilename);
-            continue;
+            filename = MusicDownloadManager::sharedState()->pathForSFX(std::stoi(tokens[i]));	
         }
-        if (!std::filesystem::remove(filename.string() + ".mp3"))
-            std::filesystem::remove(filename.string() + ".ogg");
-        if (!std::filesystem::remove(altFilename.string() + ".mp3"))
-            std::filesystem::remove(altFilename.string() + ".ogg");
-        songCount++;
+        else {
+            filename = MusicDownloadManager::sharedState()->pathForSong(std::stoi(tokens[i]));
+            songCount++;
+        }
+        std::filesystem::remove(filename);
     }
 }
 
@@ -379,7 +375,7 @@ $execute {
 });
 };
 
-class $modify (MusicDownloadManager) {
+/*class $modify (MusicDownloadManager) {
     gd::string pathForSFX(int id) {
         auto path = MusicDownloadManager::pathForSFX(id);
         log::debug("pathForSFX: {}", path);
@@ -401,4 +397,4 @@ class $modify (MusicDownloadManager) {
         return path;
     }
 
-};
+};*/
