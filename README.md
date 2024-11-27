@@ -1,7 +1,7 @@
 # Song Trash Can
-Restores and improves the level song trash button from pre-2.206!
+Replaces and improves the level song trash button!
 
-* Adds a trash button to the song widget in online level pages
+* Replaces the song widget trash button in online level pages
 * Deletes songs and SFX, with options to choose which ones
 * Will not delete GD's default songs & SFX
 

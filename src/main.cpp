@@ -7,7 +7,7 @@
 #include <Geode/modify/CCScheduler.hpp>
 #include <Geode/ui/GeodeUI.hpp>
 #include <Geode/ui/BasedButtonSprite.hpp>
-#include <Geode/loader/SettingEvent.hpp>
+//#include <Geode/loader/SettingEvent.hpp>
 #include <filesystem>
 #include <Geode/modify/MusicDownloadManager.hpp>
 #include "blacklisted_ids.hpp"
@@ -64,7 +64,7 @@ void deleteAudio(GJGameLevel* level, LevelInfoLayer* layer) {
         return songWidget->deleteSong();
 
     if (isPlaying && deleteSongs) {
-        FMODAudioEngine::sharedEngine()->stopAllMusic();
+        FMODAudioEngine::sharedEngine()->stopAllMusic(true);
         isPlaying = false;
         waitTime = 10;
         return;
@@ -289,6 +289,10 @@ class $modify(Button, LevelInfoLayer) {
             trashButton->setVisible(true);
         }	
         if ((songWidget->m_isRobtopSong && globalLevel->m_sfxIDs == "")) trashButton->setVisible(false);
+
+        if (auto robtopButton = this->m_songWidget->m_deleteBtn) {
+            robtopButton->setVisible(false);
+        }
 
         return true;
     }

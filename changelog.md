@@ -1,3 +1,7 @@
+# 1.1.7
+* Updated to GD 2.2074
+* Replaces vanilla song trash can
+
 # v1.1.6
 
 * Removed Node IDs dependency (thanks hiimjustin000)

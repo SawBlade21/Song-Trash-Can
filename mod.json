@@ -1,16 +1,16 @@
 {
-	"geode": "3.7.0",
+	"geode": "4.0.1",
 	"gd": {
-		"win": "2.206",
-		"android": "2.206",
-		"mac": "2.206"
+		"win": "2.2074",
+		"android": "2.2074",
+		"mac": "2.2074"
 	},
 	"id": "sawblade.song_trash_can",
 	"repository": "https://github.com/SawBlade21/Song-Trash-Can",
 	"name": "Song Trash Can",
-	"version": "v1.1.6",
+	"version": "v1.1.7",
 	"developer": "Sawblade",
-	"description": "Trash button that deletes a level's songs / SFX.",
+	"description": "Improved level songs & SFX trash button.",
 	"settings": {
 		"auto-select-songs": {
 			"name": "Auto Select Songs",
