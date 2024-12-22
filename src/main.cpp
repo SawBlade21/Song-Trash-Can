@@ -179,7 +179,7 @@ class trashPopup : public geode::Popup<Button*> {
         m_fields->m_trashButton->setVisible(false);
         std::string songIDs = std::string(m_level->m_songIDs);
         std::string sfxIDs = std::string(m_level->m_sfxIDs);
-        if ((songIDs) == "" && sfxIDs == "")
+        if (songIDs == "" && sfxIDs == "")
             return m_songWidget->deleteSong();
 
         if (isPlaying && deleteSongs) {
@@ -198,17 +198,17 @@ class trashPopup : public geode::Popup<Button*> {
         removeFromParentAndCleanup(true);
         CCDirector::sharedDirector()->getRunningScene()->addChild(newInfoLayer);
         
-        bool songs = (m_level->m_songIDs != "" && deleteSongs);
-        bool sfx = (m_level->m_sfxIDs != "" && deleteSFX);
+        bool songs = (newInfoLayer->m_level->m_songIDs != "" && deleteSongs);
+        bool sfx = (newInfoLayer->m_level->m_sfxIDs != "" && deleteSFX);
         bool all = (songs && sfx);
         bool none = (!songs && !sfx);
-        bool robtopSFX = (m_songWidget->m_isRobtopSong && m_level->m_songIDs != "");
+        bool robtopSFX = (newInfoLayer->m_songWidget->m_isRobtopSong && newInfoLayer->m_level->m_songIDs != "");
         std::string errorText = (all) ? "Songs & SFX Deleted" : ((songs) ? (songCount == 1) ? "Song Deleted" : "Songs Deleted" : ((sfx || robtopSFX) ? "SFX Deleted" : ""));
 
-        m_songWidget->m_errorLabel->setColor(ccc3(255, 100, 0));
-        m_songWidget->m_errorLabel->setString(errorText.c_str());
-        m_songWidget->m_errorLabel->setVisible(true);
-        m_songWidget->m_errorLabel->setScale(0.4f);
+        newInfoLayer->m_songWidget->m_errorLabel->setColor(ccc3(255, 100, 0));
+        newInfoLayer->m_songWidget->m_errorLabel->setString(errorText.c_str());
+        newInfoLayer->m_songWidget->m_errorLabel->setVisible(true);
+        newInfoLayer->m_songWidget->m_errorLabel->setScale(0.4f);
 
         deleteSongs = false;
         deleteSFX = false;
@@ -225,7 +225,7 @@ class trashPopup : public geode::Popup<Button*> {
     }
 
     void Button::button(CCObject* obj) {
-        if (m_songWidget->m_isRobtopSong) return;
+        //if (m_songWidget->m_isRobtopSong) return;
         if (std::string(this->m_level->m_levelString) == "") return;
         std::string popupText = "Do you want to <cr>delete</c> ";
         if (m_songWidget->m_isRobtopSong) {
