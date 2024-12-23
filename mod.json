@@ -10,23 +10,23 @@
 	"name": "Song Trash Can",
 	"version": "v1.1.7",
 	"developer": "Sawblade",
-	"description": "Improved level songs & SFX trash button.",
+	"description": "Improved level song & SFX trash button.",
 	"settings": {
 		"auto-select-songs": {
 			"name": "Auto Select Songs",
-			"description": "Automatically selects the <cl>songs</c> option in the delete popup on levels with <cl>SFX</c> or multiple <cl>songs</c>.",
+			"description": "Automatically selects the songs option in the delete popup on levels with SFX or multiple songs.",
 			"type": "bool",
 			"default": false
 		},
 		"auto-select-sfx": {
 			"name": "Auto Select SFX",
-			"description": "Automatically selects the <cl>SFX</c> option in the delete popup on levels with <cl>SFX</c> or multiple <cl>songs</c>.",
+			"description": "Automatically selects the SFX option in the delete popup on levels with SFX or multiple songs.",
 			"type": "bool",
 			"default": false
 		},
 		"hide-settings-button": {
 			"name": "Hide Settings Button",
-			"description": "Hides the <cy>settings</c> button from the delete popups",
+			"description": "Hides the settings button from the delete popups",
 			"type": "bool",
 			"default": false
 		}
