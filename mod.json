@@ -1,5 +1,5 @@
 {
-	"geode": "4.0.1",
+	"geode": "4.1.1",
 	"gd": {
 		"win": "2.2074",
 		"android": "2.2074",
@@ -8,7 +8,7 @@
 	"id": "sawblade.song_trash_can",
 	"repository": "https://github.com/SawBlade21/Song-Trash-Can",
 	"name": "Song Trash Can",
-	"version": "v1.1.7",
+	"version": "v1.1.8",
 	"developer": "Sawblade",
 	"description": "Improved level song & SFX trash button.",
 	"settings": {

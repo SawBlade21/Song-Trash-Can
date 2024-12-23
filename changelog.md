@@ -1,7 +1,9 @@
+# 1.1.8
+* Fixed crashes (thanks Zilko)
+
 # 1.1.7
 * Updated to GD 2.2074
 * Replaces vanilla song trash can
-* Fixed crashes (thanks Zilko)
 
 # v1.1.6
 
